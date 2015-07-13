@@ -27,13 +27,15 @@ def learn():
 	with open('test.csv') as test_csv:
 		learning_reader = csv.reader(test_csv, delimiter=' ', quotechar='|')
 		next(learning_reader, None)
+		learning_reader = list(learning_reader)
 		i = 0
+		learning_labels = [-1] * len(learning_reader)
 		for row in learning_reader:
-			row = [int(i) for i in row[0].split(',')]
+			row = [int(j) for j in row[0].split(',')]
 			min_dist = sys.maxint
 			closest_num = -1
 			for count, (vec, num) in enumerate(zip(training_vectors, training_labels)):
-				if count % 100 == 0:
+				if count % 1000 == 0:
 					print "Working on training vector number " + str(count) + "for learning reader " + str(i)
 				d = dist(row, vec)
 				if min_dist > d:
