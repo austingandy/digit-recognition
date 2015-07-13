@@ -3,7 +3,6 @@ training_labels = []
 training_vectors = []
 learning_labels = []
 learning_vectors = []
-header = []
 #training_distances = [[]]
 def main():
 	train()
@@ -23,7 +22,7 @@ def train():
 	print "Done training!"
 
 def learn():
-	global training_labels, training_vectors, learning_labels, learning_vectors, header
+	global training_labels, training_vectors, learning_labels, learning_vectors
 	with open('test.csv') as test_csv:
 		learning_reader = csv.reader(test_csv, delimiter=' ', quotechar='|')
 		next(learning_reader, None)
@@ -35,8 +34,8 @@ def learn():
 			min_dist = sys.maxint
 			closest_num = -1
 			for count, (vec, num) in enumerate(zip(training_vectors, training_labels)):
-				if count % 1000 == 0:
-					print "Working on training vector number " + str(count) + "for learning reader " + str(i)
+				if count % 10000 == 0:
+					print "Working on training vector number " + str(count) + " for learning reader " + str(i)
 				d = dist(row, vec)
 				if min_dist > d:
 					min_dist = d
@@ -46,10 +45,10 @@ def learn():
 	print "Done learning!"
 
 def write():
-	global training_labels, header
-	with open('answers.csv', 'w', newline='') as csvfile:
-		answer_writer = csvfile
-		answer_writer.writerow(header)
+	global training_labels
+	with open('answers.csv', 'w') as csvfile:
+		answer_writer = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+		answer_writer.writerow(['Answers'])
 		for label in training_labels:
 			answer_writer.writerow(list(str(label)))
 
